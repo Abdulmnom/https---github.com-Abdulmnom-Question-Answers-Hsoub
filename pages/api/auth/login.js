@@ -11,6 +11,7 @@ const handler = async (req, res) => {
     const {email, password} = req.body
 
     const user = await User.findOne({email})
+    // compare password لمقاترنة الباسورد
     if (!user?.comparePassword(password)) {
         return res.status(400).json()
     }

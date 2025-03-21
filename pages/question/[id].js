@@ -30,7 +30,7 @@ export default function Show({ params }) {
     const id = router.query.id;
 
     useEffect(() => {
-        if (!params?.id) Router.push('/404');
+        if (!params?.id) Router.replace('/404');
     }, [params]);
 
     const { data: post, loading, answer, vote } = usePost(params?.id);
@@ -54,7 +54,7 @@ export default function Show({ params }) {
     return (
         <MainLayout title={post?.question?.title} loading={loading}>
             <Head>
-                <title>{params?.question?.title}</title>
+                <title>{params?.question?.title || "Post"}</title>
             </Head>
             <Box display='flex' m={2}>
                 <Vote votesTotal={post?.votesTotal} vote={type => vote(post?.id, type)} />
@@ -81,11 +81,21 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
     await dbConnect();
+
+    if(!params?.id) {
+        return {notFound: true}
+    }
     const post = await Posts.findById(params.id).exec();
+
+    if (!post) {
+        return { notFound: true }; // إعادة صفحة 404 إذا لم يتم العثور على المنشور
+    }
+
     return {
         props: {
             params: JSON.parse(JSON.stringify(post))
-        }
+        },
+       
     };
 }
 
@@ -129,40 +139,44 @@ function Answers({items, vote}) {
         <>
             <Box className={classes.answersTitle}>
                 <Typography variant='h6'>
-                    <FormattedMessage id='post.answers'/>
+                    <FormattedMessage id='post.answers' />
                 </Typography>
             </Box>
-            <Divider/>
+            <Divider />
             {
-                items?.map(answer => {
-                    return <>
-                        <Answer data={answer} vote={type => vote(answer.id, type)}/>
-                        <Divider/>
-                    </>
-                })
+                items?.map((answer, index) => (
+                    <div key={index}>
+                        <Answer data={answer} vote={type => vote(answer.id, type)} />
+                        <Divider />
+                    </div>
+                ))
             }
         </>
-    )
+    );
 }
 
 
 function AnswerForm({ onSubmit }) {
     const classes = useStyles();
     const [content, setContent] = useState('');
+    
     const handleSubmit = async () => {
         if (!content.trim()) {
             console.error('Content is required');
             return;
         }
-        console.log('Submitting content:', content);
-        await onSubmit({ content });
-        setContent('');
+
+        try {
+            await onSubmit({ content });
+            setContent(''); // تفريغ الحقل بعد الإرسال
+        } catch (error) {
+            console.error('Error submitting answer:', error);
+        }
     };
+
     return (
         <Box p={2} className={classes.answerForm}>
-            <Box>
-                <Editor onChange={setContent} content={content} />
-            </Box>
+            <Editor onChange={setContent} content={content} />
             <Button color="primary" variant="contained" onClick={handleSubmit}>
                 <FormattedMessage id='btn.share' />
             </Button>

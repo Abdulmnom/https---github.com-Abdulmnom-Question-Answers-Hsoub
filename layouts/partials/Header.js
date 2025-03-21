@@ -97,6 +97,14 @@ function UserMenu({ user, logout, classes }) {
                         </a>
                     </Link>
                 </MenuItem>
+                <MenuItem>
+                    <Link href="/tag" passHref>
+                      <a className={classes.link}>
+                        <FormattedMessage id="btn.tag" />
+                      </a>
+                    </Link>
+              
+                </MenuItem>
                 <MenuItem onClick={handleLogout}>
                     <FormattedMessage id="header.logout" />
                 </MenuItem>
