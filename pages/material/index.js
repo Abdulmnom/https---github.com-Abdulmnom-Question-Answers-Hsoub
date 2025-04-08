@@ -1,6 +1,6 @@
 import { Container, Box, Grid } from '@material-ui/core'
 import { makeStyles, styled } from '@material-ui/core/styles'
-import Header from '../../components/Header'
+import Header from '../../layouts/Main'
 
 const useStyles = makeStyles({
     root: {
