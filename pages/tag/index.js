@@ -17,16 +17,10 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Tags() {
    const classes = useStyles()
-
    const { data: tags } = useTags()
 
    return (
        <MainLayout title={'title.tags'}>
-
-           <Head>
-               <title>التصنيفات</title>
-           </Head>
-
            <Grid container spacing={3} className={classes.container}>
                {
                    tags.map(({ name, slug, description }, index) =>

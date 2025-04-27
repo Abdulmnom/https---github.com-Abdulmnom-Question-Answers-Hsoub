@@ -18,21 +18,22 @@ export default function Ask() {
 
     const {data: tagsList} = useTags()
 
-    const [title, setTitle] = useState()
-    const [tags, setTags] = useState([])
-    const [content, setContent] = useState()
+    const [title, setTitle] = useState("")
+    const [tags, setTags] = useState(['اضف التصنيفات'])
+    const [content, setContent] = useState("")
 
     const onSubmit = async event => {
         event.preventDefault()
         const data = {
             title,
             content,
-            tags: tags.map(e => e.value)
+            tags: tags?.map(e => e.value)
         }
         console.log(data)
         const id = await askApi(data)
         router.push(`/question/${id}`)
     }
+    
 
     return (
         <MainLayout title='title.ask'>
@@ -53,7 +54,7 @@ export default function Ask() {
                         label='input.tags'
                         onChange={setTags}
                         value={tags}
-                        options={tagsList.map(e => ({label: e.name, value: e.id}))}
+                        options={tagsList?.map(e => ({label: e.name, })) || [""]}
                     />
                     <Box marginBottom={2}>
                         {user && <Editor onChange={setContent} content={content}/>}

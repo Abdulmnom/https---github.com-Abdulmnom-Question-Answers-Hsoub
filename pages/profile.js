@@ -31,6 +31,11 @@ export default function Profile() {
     const [passwordData, setPasswordData] = useState()
     const [loading, setLoading] = useState({profile: false, password: false})
     const [error, setError] = useState({profile: false, password: false})
+    
+    const {user} = useAuth({
+        // only user is allowed to access
+        redirectTo: '/login', redirectIfFound: false
+    })
     const [notificationPreferences, setNotificationPreferences] = useState(user?.notificationPreferences || false);
 
     const handleNotificationChange = async (event) => {
@@ -40,10 +45,6 @@ export default function Profile() {
         await updateNotificationPreferences(newPreference);
     };
 
-    const {user} = useAuth({
-        // only user is allowed to access
-        redirectTo: '/login', redirectIfFound: false
-    })
 
     useEffect(() => {
         if (!user) return

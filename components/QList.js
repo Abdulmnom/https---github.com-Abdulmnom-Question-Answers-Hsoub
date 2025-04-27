@@ -72,13 +72,23 @@ const QItem = memo(({ item }) => {
 })
 
 function Tags({ tags = [] }) {
-    return tags.map(e => 
-        <Link href={`/tag/${e.slug}`} passHref key={e.id}>
-            <a>
-                <Chip label={e.name} color="secondary" variant="default" size="small"/>
-            </a>
-        </Link>
-    )
+    return (
+        <>
+            {tags?.filter(tag => tag && tag.slug).map(e => (
+                <Link href={`/tag/${e.slug}`} passHref key={e.id}>
+                    <a style={{ textDecoration: 'none' }}>
+                        <Chip 
+                            label={e.name || 'Untitled'} 
+                            color="secondary" 
+                            variant="default" 
+                            size="small"
+                            clickable
+                        />
+                    </a>
+                </Link>
+            ))}
+        </>
+    );
 }
 
 export default function QList({ items = [] }) {
