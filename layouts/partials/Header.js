@@ -91,7 +91,7 @@ function UserMenu({ user, logout, classes }) {
                     <FormattedMessage id="header.profile" />
                 </MenuItem>
                 <MenuItem>
-                    <Link href="http://localhost:3000/question/ask" passHref>
+                    <Link href="/question/ask" passHref>
                         <a className={classes.link}>
                             <FormattedMessage id="btn.share" />
                         </a>
